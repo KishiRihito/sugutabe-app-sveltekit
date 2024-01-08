@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+  import { page } from '$app/stores';
   import { Shadow } from 'svelte-loading-spinners';
   import logo from '$img/logo.png?enhanced'
   import ResultList from '$lib/components/ResultList.svelte';
@@ -15,7 +16,7 @@
     format: 'json' | 'xml',
   };
 
-  export let data: PageData;
+  // export let data: PageData;
 
   let queryInit = {// URLパラメータの初期値
     count: 100,
@@ -31,14 +32,16 @@
 
   const requestURL = (query: Query): string => {
     let requestUrl;
-    const key = data.api_key;
-    const proxyUrl = data.proxy_url;
+    const key = $page.data.api_key;
+    const proxyUrl = $page.data.proxy_url;
     const searchParams = new URLSearchParams(Object.entries(query));// key以外のパラメータを作成
 
     const url = `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${key}&${searchParams.toString()}`;
 
+    console.log(url);
+
     // 開発時はCORSプロキシサーバを追加
-    data.mode === 'development'
+    $page.data.mode === 'development'
       ? requestUrl = proxyUrl + url
       : requestUrl = url;
     return requestUrl;

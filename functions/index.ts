@@ -1,8 +1,8 @@
 interface Env {
-	HOTPEPPER_GOURMET_API_KEY: string;
+	KV: KVNamespace;
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
-	const value = context.env.HOTPEPPER_GOURMET_API_KEY;
+	const value = await context.env.KV.get('example');
  	return new Response(value);
 }
