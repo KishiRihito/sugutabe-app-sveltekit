@@ -36,9 +36,7 @@
     const proxyUrl = $page.data.proxy_url;
     const searchParams = new URLSearchParams(Object.entries(query));// key以外のパラメータを作成
 
-    const url = `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${key}&${searchParams.toString()}`;
-
-    console.log(url);
+    const url = `http://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=${key}&${searchParams.toString()}`;
 
     // 開発時はCORSプロキシサーバを追加
     $page.data.mode === 'development'
@@ -58,8 +56,11 @@
 
       const requestUrl = requestURL(query);
 
-      const response = await fetch(requestUrl);
-      resultData = await response.json();
+      const response = await fetch(requestUrl, {
+        method: 'GET',
+      });
+      resultData = await response.json().catch(console.error);
+      console.log(resultData);
       isSearching = false;
     };
 
